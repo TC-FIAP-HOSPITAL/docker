@@ -1,5 +1,14 @@
-
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # porta de comunicação dos microsserviços
+      - "15672:15672" # painel web
+    networks:
+      - local-network
+
   ms-agendamento:
     build: ./ms-agendamento
     container_name: ms-agendamento
@@ -10,9 +19,17 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-agendamento:3306/agendamento
       - SPRING_DATASOURCE_USERNAME=adm123
       - SPRING_DATASOURCE_PASSWORD=adm123
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-agendamento:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - local-network
 
   db-agendamento:
     image: mysql:8.0
@@ -32,6 +49,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - local-network
 
   ms-historico:
     build: ./ms-historico
@@ -43,9 +62,17 @@ services:
       - SPRING_DATASOURCE_USERNAME=adm123
       - SPRING_DATASOURCE_PASSWORD=adm123
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-historico:3306/historico
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
       db-historico:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - local-network
 
   db-historico:
     image: mysql:8.0
@@ -65,11 +92,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - local-network
 
 volumes:
   ms-agendamento-data:
   ms-historico-data:
 
 networks:
-  default:
+  local-network:
     name: local-network
