@@ -1,0 +1,75 @@
+
+services:
+  ms-agendamento:
+    build: ./ms-agendamento
+    container_name: ms-agendamento
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-agendamento:3306/agendamento
+      - SPRING_DATASOURCE_USERNAME=adm123
+      - SPRING_DATASOURCE_PASSWORD=adm123
+    depends_on:
+      db-agendamento:
+        condition: service_healthy
+
+  db-agendamento:
+    image: mysql:8.0
+    container_name: db-agendamento
+    environment:
+      MYSQL_DATABASE: agendamento
+      MYSQL_USER: adm123
+      MYSQL_PASSWORD: adm123
+      MYSQL_ROOT_PASSWORD: adm123
+    volumes:
+      - ms-agendamento-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-padm123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ms-historico:
+    build: ./ms-historico
+    container_name: ms-historico
+    restart: always
+    ports:
+      - 8082:8082
+    environment:
+      - SPRING_DATASOURCE_USERNAME=adm123
+      - SPRING_DATASOURCE_PASSWORD=adm123
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-historico:3306/historico
+    depends_on:
+      db-historico:
+        condition: service_healthy
+
+  db-historico:
+    image: mysql:8.0
+    container_name: db-historico
+    environment:
+      MYSQL_DATABASE: historico
+      MYSQL_USER: adm123
+      MYSQL_PASSWORD: adm123
+      MYSQL_ROOT_PASSWORD: adm123
+    volumes:
+      - ms-historico-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-p", "adm123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  ms-agendamento-data:
+  ms-historico-data:
+
+networks:
+  default:
+    name: local-network
