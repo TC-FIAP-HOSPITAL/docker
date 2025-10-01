@@ -14,7 +14,7 @@ services:
     container_name: ms-agendamento
     restart: always
     ports:
-      - 8081:8081
+      - 8085:8081
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-agendamento:3306/agendamento
       - SPRING_DATASOURCE_USERNAME=adm123
@@ -57,11 +57,11 @@ services:
     container_name: ms-historico
     restart: always
     ports:
-      - 8082:8082
+      - 8086:8081
     environment:
       - SPRING_DATASOURCE_USERNAME=adm123
       - SPRING_DATASOURCE_PASSWORD=adm123
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db-historico:3306/historico
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-historico:3307/historico
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
@@ -95,9 +95,53 @@ services:
     networks:
       - local-network
 
+  ms-notificacao:
+    build: ./ms-notificacao
+    container_name: ms-notificacao
+    restart: always
+    ports:
+      - 8087:8082
+    environment:
+      - SPRING_DATASOURCE_USERNAME=adm123
+      - SPRING_DATASOURCE_PASSWORD=adm123
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-notificacao:3308/notificacao
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    depends_on:
+      db-historico:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - local-network
+
+  db-notificacao:
+    image: mysql:8.0
+    container_name: db-notificacao
+    environment:
+      MYSQL_DATABASE: notificacao
+      MYSQL_USER: adm123
+      MYSQL_PASSWORD: adm123
+      MYSQL_ROOT_PASSWORD: adm123
+    volumes:
+      - ms-notificacao-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-p", "adm123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - local-network
+
 volumes:
   ms-agendamento-data:
   ms-historico-data:
+  ms-notificacao-data:
 
 networks:
   local-network:

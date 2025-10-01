@@ -13,12 +13,16 @@ else
 fi
 
 # URLs dos repositórios
+REPO_LOGIN="https://github.com/TC-FIAP-HOSPITAL/ms-login"
 REPO_AGENDAMENTO="https://github.com/TC-FIAP-HOSPITAL/ms-agendamento"
 REPO_HISTORICO="https://github.com/TC-FIAP-HOSPITAL/ms-historico"
+REPO_NOTIFICACAO="https://github.com/TC-FIAP-HOSPITAL/ms-notificacao"
 
 # Clonar se os diretórios não existirem
+[ ! -d "ms-login" ] && git clone "REPO_LOGIN"
 [ ! -d "ms-agendamento" ] && git clone "REPO_AGENDAMENTO"
 [ ! -d "ms-historico" ] && git clone "REPO_HISTORICO"
+[ ! -d "ms-notificacao" ] && git clone "REPO_NOTIFICACAO"
 
 # URL do Gist
 #TODO : ALTERAR O URL DO GIT GIST

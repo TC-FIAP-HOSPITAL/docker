@@ -19,15 +19,23 @@ if %ERRORLEVEL%==0 (
 )
 
 :: URLs dos repositórios
+set "REPO_LOGIN=https://github.com/TC-FIAP-HOSPITAL/ms-login"
 set "REPO_AGENDAMENTO=https://github.com/TC-FIAP-HOSPITAL/ms-agendamento"
 set "REPO_HISTORICO=https://github.com/TC-FIAP-HOSPITAL/ms-historico"
+set "REPO_NOTIFICACAO=https://github.com/TC-FIAP-HOSPITAL/ms-notificacao"
 
 :: Clonar se os diretórios não existirem
+if not exist "ms-login" (
+    git clone %REPO_LOGIN%
+)
 if not exist "ms-agendamento" (
     git clone %REPO_AGENDAMENTO%
 )
 if not exist "ms-historico" (
     git clone %REPO_HISTORICO%
+)
+if not exist "ms-notificacao" (
+    git clone %REPO_NOTIFICACAO%
 )
 
 :: URL do docker-compose.yaml
