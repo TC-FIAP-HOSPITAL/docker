@@ -39,8 +39,7 @@ if not exist "ms-notificacao" (
 )
 
 :: URL do docker-compose.yaml
-:: TODO: ALTERAR ESSA URL APOS TERMINAR TODO DESENVOLVIMENTO
-set "GIST_RAW_URL=https://gist.githubusercontent.com/Ghustavo516/887bd750beb6a79caecf314a503e5ab3/raw/050670da36d1baa591e6e7fe099fb3af1e6cb26c/docker-compose.yaml"
+set "GIST_RAW_URL=https://gist.githubusercontent.com/Ghustavo516/3894e3c8f64ca917c9325a6b74e9c7a8/raw/3a314f4e15acc1c9b86e7763c851b3fa61baddfd/tc3-docker-compose.yaml"
 
 :: Verifica se curl está disponível
 where curl >nul 2>nul

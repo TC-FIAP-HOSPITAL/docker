@@ -25,9 +25,7 @@ REPO_NOTIFICACAO="https://github.com/TC-FIAP-HOSPITAL/ms-notificacao"
 [ ! -d "ms-notificacao" ] && git clone "REPO_NOTIFICACAO"
 
 # URL do Gist
-#TODO : ALTERAR O URL DO GIT GIST
-
-GIST_RAW_URL="https://gist.githubusercontent.com/Ghustavo516/887bd750beb6a79caecf314a503e5ab3/raw/050670da36d1baa591e6e7fe099fb3af1e6cb26c/docker-compose.yaml"
+GIST_RAW_URL="https://gist.githubusercontent.com/Ghustavo516/3894e3c8f64ca917c9325a6b74e9c7a8/raw/3a314f4e15acc1c9b86e7763c851b3fa61baddfd/tc3-docker-compose.yaml"
 
 # Baixar docker-compose.yaml
 if command -v curl >/dev/null 2>&1; then
