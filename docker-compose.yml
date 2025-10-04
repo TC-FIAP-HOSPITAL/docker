@@ -9,6 +9,45 @@ services:
     networks:
       - local-network
 
+  ms-login:
+    build: ./ms-login
+    container_name: ms-login
+    restart: always
+    ports:
+      - 8088:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-login:3309/login
+      - SPRING_DATASOURCE_USERNAME=adm123
+      - SPRING_DATASOURCE_PASSWORD=adm123
+    depends_on:
+      db-agendamento:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - local-network
+
+  db-login:
+    image: mysql:8.0
+    container_name: db-login
+    environment:
+      MYSQL_DATABASE: login
+      MYSQL_USER: adm123
+      MYSQL_PASSWORD: adm123
+      MYSQL_ROOT_PASSWORD: adm123
+    volumes:
+      - ms-login-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3309:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-padm123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - local-network
+
   ms-agendamento:
     build: ./ms-agendamento
     container_name: ms-agendamento
@@ -142,6 +181,7 @@ volumes:
   ms-agendamento-data:
   ms-historico-data:
   ms-notificacao-data:
+  ms-login:
 
 networks:
   local-network:
