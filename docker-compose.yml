@@ -148,6 +148,10 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - API_BASE_BREVO=https://api.brevo.com
+      - API_KEY_BREVO=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
+      - API_ENDPOINT_BREVO=/v3/smtp/email
+      - USUARIO_ENDPOINT=http://localhost:9088/ms-login/
     depends_on:
       db-notificacao:
         condition: service_healthy
