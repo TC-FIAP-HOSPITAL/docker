@@ -62,6 +62,7 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - USUARIO_ENDPOINT=http://localhost:9088/ms-login/
     depends_on:
       db-agendamento:
         condition: service_healthy
